@@ -8,7 +8,26 @@ RSpec.describe "adding a project", type: :system do
     fill_in "Tasks", with: "Choose Fabric:3\nMake it Work:5"
     click_on("Create Project")
     visit projects_path
-    expect(page).to have_content("Project Runway")
-    expect(page).to have_content(8)
+
+    # expect(page).to have_content("Project Runway")
+    # expect(page).to have_content(8)
+    @project = Project.find_by(name: "Project Runway")
+    expect(page).to have_selector(
+      "#project_#{@project.id} .name", text: 'Project Runway' )
+
+    expect(page).to have_selector(
+      "#project_#{@project.id} .total-size", text: '8' )
+
+  end
+
+  it 'does not allow user to create a project without a name' do
+    visit new_project_path
+    fill_in 'Name', with: ''
+    fill_in 'Task', with: "Choose Fabric:3\nMake it Work:5"
+    click_on 'Create Project'
+
+    # checking that you redirect back to something that allows you to re-enter
+    # the project
+    expect(page).to have_selector('.new_project')
   end
 end
