@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Task do
+
+  it_should_behave_like 'sizeable'  # spec/shared/size_group.rb
+
   describe "initialization" do
     let(:task) { Task.new }
 
