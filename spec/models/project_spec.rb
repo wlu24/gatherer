@@ -1,5 +1,6 @@
 require "rails_helper"
 RSpec.describe Project do
+  it_should_behave_like 'sizable'
 
   describe "completion" do
     let(:project) { Project.new }
