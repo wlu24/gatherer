@@ -38,4 +38,18 @@ RSpec.describe Task do
       expect(task.points_toward_velocity).to eq(0)
     end
   end
+
+
+  it 'stubs with multiple return values' do
+    task = Task.new
+    allow(task).to receive(:size).and_return(1, 2)
+
+    # The return values of the stubbed method walk through the values passed to
+    # and_return. Note that the values don’t cycle; the last value is repeated
+    # over and over again.
+    assert_equal(1, task.size)
+    assert_equal(2, task.size)
+    assert_equal(2, task.size)
+  end
+
 end
