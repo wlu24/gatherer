@@ -73,5 +73,21 @@ RSpec.describe Project do
   end
   #
 
+  describe 'task order' do
+    let(:project) { create(:project, name: 'Project') }
+
+    it 'makes 1 the order for the first task in an entry project' do
+      expect(project.next_task_order).to eq(1)
+    end
+
+    it 'gives the order of the next task as one more than the highest' do
+      project.tasks.create(project_order: 1)
+      project.tasks.create(project_order: 3)
+      project.tasks.create(project_order: 2)
+
+      expect(project.next_task_order).to eq(4)
+    end
+  end
+
 
 end

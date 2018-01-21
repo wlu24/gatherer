@@ -3,7 +3,7 @@ class CreatesProject
 
   def initialize(name: "", task_string: "")
     @name = name
-    @task_string = task_string
+    @task_string = task_string || ""
     @success = false
   end
 
@@ -21,12 +21,13 @@ class CreatesProject
   end
 
   def size_as_integer(size_str)
-    size_str.nil? ? 1 : [size_str.to_i, 1].max
+    size_str.blank? ? 1 : [size_str.to_i, 1].max
   end
 
   def create
     build
-    @success = project.save
+    result = project.save
+    @success = result
   end
 
   def success?

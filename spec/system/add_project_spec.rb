@@ -26,8 +26,6 @@ RSpec.describe "adding a project", type: :system do
     fill_in 'Task', with: "Choose Fabric:3\nMake it Work:5"
     click_on 'Create Project'
 
-    # checking that you redirect back to something that allows you to re-enter
-    # the project
     expect(page).to have_selector('.new_project')
   end
 

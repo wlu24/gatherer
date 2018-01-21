@@ -1,7 +1,7 @@
 class Task < ApplicationRecord
   include Sizeable
 
-  belongs_to :project
+  belongs_to :project, required: false
 
   def mark_completed(date = Time.current)
     self.completed_at = date
@@ -19,4 +19,41 @@ class Task < ApplicationRecord
   def points_toward_velocity
     part_of_velocity? ? size : 0
   end
+
+  def first_in_project?
+    return false unless project
+
+    # Note that you’re using the fact that the project defined the task
+    # association to be in order so that you can assume that the order returned
+    # by project.tasks is what you expect.
+    project.tasks.first == self
+  end
+
+  def last_in_project?
+    return false unless project
+    project.tasks.last == self
+  end
+
+  def previous_task
+    project.tasks.find_by(project_order: project_order - 1)
+  end
+
+  def next_task
+    project.tasks.find_by(project_order: project_order + 1)
+  end
+
+  def swap_order_with(other)
+    other.project_order, self.project_order = project_order, other.project_order
+    save
+    other.save
+  end
+
+  def move_up
+    swap_order_with(previous_task) unless first_in_project?
+  end
+
+  def move_down
+    swap_order_with(next_task) unless last_in_project?
+  end
+
 end
