@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
   include Sizeable
-  
+
   has_many :tasks, dependent: :destroy
 
   validates :name, presence: true
@@ -21,6 +21,8 @@ class Project < ApplicationRecord
     tasks.sum(&:size)
   end
 
+  alias_method :total_size, :size
+
   def remaining_size
     incomplete_tasks.sum(&:size)
   end
@@ -34,6 +36,7 @@ class Project < ApplicationRecord
   end
 
   def projected_days_remaining
+    # return value is nan if current_rate is 0
     remaining_size / current_rate
   end
 
